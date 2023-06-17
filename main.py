@@ -12,7 +12,7 @@ def main():
         payload = {
             "project": "object_282",
             "metrics": "vse-obrascheniya-novyy-_1508235518;comagic_calls;"
-                       "crm_contracts",
+            "crm_contracts",
             "datetimeFrom": "2020-01-01 00:00:00",
             "datetimeTo": "2020-01-31 23:59:59",
             "groupBy": "day",
