@@ -4,7 +4,7 @@ from smartis_api import SmartisAPIEndpoints, SmartisAPIError
 
 
 def main():
-    """Управление обращения к эндпоинтам через пакет smartis_api."""
+    """Управление обращениями к эндпоинтам через пакет smartis_api."""
 
     client = SmartisAPIEndpoints()
 
