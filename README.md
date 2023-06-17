@@ -46,7 +46,7 @@ pip install -r requirements.txt
 
 4. Создайте '.env' фаил в директории "smartis_api":
 
-Получить демо-токен можно в документации Smartis API (https://my.smartis.bi/api/documentation)
+Демо-токен предоставлен в  документации Smartis API (https://my.smartis.bi/api/documentation)
 
 ```
 API_TOKEN = <your_api_token_here>
