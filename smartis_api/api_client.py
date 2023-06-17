@@ -1,4 +1,3 @@
-import http.client
 import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -6,7 +5,7 @@ from dataclasses import dataclass
 import requests
 from dotenv import load_dotenv
 
-from .exceptions import SmartisAPIError
+from .exceptions import ErrorMessages, SmartisAPIError
 
 load_dotenv()
 
@@ -20,8 +19,11 @@ class HttpRequester(ABC):
         pass
 
 
+@dataclass
 class DefaultHttpRequester(HttpRequester):
     """Дефолтная конфигурация для HttpRequester."""
+
+    session = requests.Session()
 
     def make_request(self, url, method, headers, data):
         """
@@ -31,27 +33,27 @@ class DefaultHttpRequester(HttpRequester):
         """
         try:
             if method == "GET":
-                response = requests.get(url, headers=headers)
+                response = self.session.get(url, headers=headers)
             else:
-                response = requests.post(url, headers=headers, json=data)
+                response = self.session.post(url, headers=headers, json=data)
 
             response.raise_for_status()
 
         except requests.exceptions.ConnectionError as e:
-            return str(e)
+            raise SmartisAPIError(str(e))
 
-        except requests.exceptions.RequestException as e:
-            error_message = response.content.decode("unicode_escape")
-            status_code_name = http.client.responses.get(
-                response.status_code, "Unknown"
-            )
-            error_type = type(e).__name__
-            raise SmartisAPIError(
-                f"{error_type} - {response.status_code} "
-                f"{status_code_name}\n{error_message}"
-            )
+        except requests.exceptions.RequestException as re:
+            error_message = ErrorMessages.get_error_message(response, re)
+            raise SmartisAPIError(error_message)
 
-        return response.json()
+        try:
+            return response.json()
+
+        except requests.exceptions.JSONDecodeError:
+            error_message = ErrorMessages.get_json_decode_error_message(
+                response
+            )
+            raise SmartisAPIError(error_message)
 
 
 @dataclass
@@ -61,13 +63,17 @@ class SmartisAPIClient:
     BASE_URL: str = "https://my.smartis.bi/api"
     API_KEY: str = os.getenv("API_TOKEN")
     http_requester: HttpRequester = DefaultHttpRequester()
+    headers = {"Authorization": f"Bearer {API_KEY}"}
 
     def _make_request(self, endpoint, method="POST", data=None):
         """Отправка запроса на эндпоинт API."""
-        url = f"{self.BASE_URL}{endpoint}"
-        headers = {"Authorization": f"Bearer {self.API_KEY}"}
+        if self.API_KEY is None:
+            raise ValueError("API_TOKEN is not set.")
 
-        return self.http_requester.make_request(url, method, headers, data)
+        url = f"{self.BASE_URL}{endpoint}"
+        return self.http_requester.make_request(
+            url, method, self.headers, data
+        )
 
 
 class SmartisAPIEndpoints(SmartisAPIClient):
