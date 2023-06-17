@@ -30,7 +30,7 @@ class ErrorMessages:
             response.status_code, "Unknown"
         )
         error = {
-            "error": "API response could not be parsed in JSON format."
+            "error": "API response could not be parsed in JSON format. "
             "Possible error source: - API Token is incorrect "
             "or missing."
         }
