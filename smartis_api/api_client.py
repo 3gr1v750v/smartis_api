@@ -1,3 +1,5 @@
+"""Модуль подключение к Smartis API."""
+
 import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -27,9 +29,10 @@ class DefaultHttpRequester(HttpRequester):
 
     def make_request(self, url, method, headers, data):
         """
-        Обработка запроса к эндпоинту. Включая роутинг типов запросов
-        в зависимости от метода обращения и обработка исключений/ошибок
-        взаимодействия с энедпоинтами Smartis API.
+        Обработка запроса к эндпоинту.
+
+        Включая роутинг типов запросов в зависимости от метода обращения и
+        обработка исключений/ошибок взаимодействия с энедпоинтами Smartis API.
         """
         try:
             if method == "GET":
@@ -81,12 +84,10 @@ class SmartisAPIEndpoints(SmartisAPIClient):
 
     def get_report(self, payload):
         """Эндпоинт /reports/getReport."""
-
         endpoint = "/reports/getReport"
         return self._make_request(endpoint, data=payload)
 
     def get_keywords(self, payload):
         """Эндпоинт /reports/getKeywords."""
-
         endpoint = "/reports/getKeywords"
         return self._make_request(endpoint, data=payload)

@@ -1,3 +1,5 @@
+"""Модуль примера обращения к эндпоинтам пакета Smartis API."""
+
 import json
 
 from smartis_api import SmartisAPIEndpoints, SmartisAPIError
@@ -5,7 +7,6 @@ from smartis_api import SmartisAPIEndpoints, SmartisAPIError
 
 def main():
     """Управление обращениями к эндпоинтам через пакет smartis_api."""
-
     client = SmartisAPIEndpoints()
 
     try:

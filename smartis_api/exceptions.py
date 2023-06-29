@@ -1,3 +1,5 @@
+"""Обработка ошибок обращения к Smartis API."""
+
 import http.client
 
 
