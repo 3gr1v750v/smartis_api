@@ -1,6 +1,14 @@
+# https://pre-commit.com/
+# Установка:
+#   заходим в каталог с проектом и выполняем `pip install pre-commit`
+#   рядом с setup.cfg создаем файл `.pre-commit-config.yaml` с содержимым этого файла
+# Запуск полного сканирования:
+#   из корня проекта запускаем команду `pre-commit run --all-files`
+
 repos:
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
+    # Хуки pre-commit для валидации-исправления базовых ошибок.
     rev: v4.4.0
     hooks:
       - id: check-added-large-files
@@ -10,7 +18,15 @@ repos:
         exclude: requirements.txt
       - id: trailing-whitespace
 
+  - repo: https://github.com/myint/autoflake
+    # Проверка неиспользуемых импортов и переменных.
+    rev: v2.2.0
+    hooks:
+      - id: autoflake
+        args: [ --remove-all-unused-imports, --remove-unused-variables ]
+
   - repo: https://github.com/pycqa/isort
+    # Сортировка импортов
     rev: '5.12.0'
     hooks:
       - id: isort
@@ -22,6 +38,7 @@ repos:
           - "--use-parentheses"
 
   - repo: https://github.com/psf/black
+    # Автоформатирование длинны строки.
     rev: '23.3.0'
     hooks:
       - id: black
@@ -31,6 +48,7 @@ repos:
           - "--skip-string-normalization"
 
   - repo: https://github.com/PyCQA/flake8
+    # Проверка кода на соответствие PEP8, включая наличие докстрингов.
     rev: '6.0.0'
     hooks:
         - id: flake8
