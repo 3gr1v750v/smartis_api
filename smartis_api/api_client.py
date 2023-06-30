@@ -1,9 +1,10 @@
 """Модуль подключение к Smartis API."""
 
+
 import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-import json
+
 import requests
 from dotenv import load_dotenv
 
